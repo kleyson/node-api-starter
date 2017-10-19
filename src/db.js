@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017/datapoint';
 
-exports.connect = async () => {
+exports.connect = async (host) => {
   mongoose.connection.on('connected', () => {
     console.log('Connected to MongoDB.');
   });
@@ -24,7 +23,7 @@ exports.connect = async () => {
   });
 
   try {
-    return await mongoose.connect(DATABASE_URL, { useMongoClient: true });
+    return await mongoose.connect(host, { useMongoClient: true });
   } catch (err) {
     return err;
   }
