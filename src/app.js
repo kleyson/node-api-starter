@@ -4,6 +4,7 @@ const cors = require('cors');
 const logger = require('morgan');
 const helmet = require('helmet');
 const errorhandler = require('errorhandler');
+const { mongooseErrorHandler } = require('./helpers/errorHandler');
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use((req, res, next) => {
   err.status = 404;
   next(err);
 });
+
+app.use(mongooseErrorHandler);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler());

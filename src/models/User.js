@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
-const validator = require('validator');
+const validate = require('mongoose-validator');
 
 // Here is not possible use an arrow function because 'this' must point to module.
 function generateSalt(next) {
@@ -26,7 +26,10 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    validate: [validator.isEmail, 'Invalid Email Address'],
+    validate: validate({
+      validator: 'isEmail',
+      message: 'Invalid Email Address',
+    }),
     required: 'Email is required',
   },
   password: { type: String, required: 'Password is required' },

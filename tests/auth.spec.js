@@ -40,6 +40,14 @@ describe('DataPoint', () => {
     loggedUser = response.body;
   });
 
+  it('Should reject the invalid email', async () => {
+    newUser.email = 'notanemail';
+    const response = await request.post('/register').send(newUser);
+    expect(response.status).toEqual(422);
+    expect(response.body.error[0]).toEqual('Invalid Email Address');
+    expect(response.body._id).toBeUndefined();
+  });
+
   it('Should fail when login with a invalid user email', async () => {
     newUser.email = 'a@w.c';
     const response = await request.post('/login').send(newUser);
