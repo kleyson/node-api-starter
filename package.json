@@ -30,11 +30,23 @@
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.7.0",
+    "faker": "^4.1.0",
     "jest": "^21.2.1",
+    "nodejs-dashboard": "^0.4.1",
+    "nodemon": "^1.12.1",
     "supertest": "^3.0.0"
   },
   "scripts": {
+    "dev": "npx nodemon ./index.js",
     "start": "node ./index.js",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "posttest": "./tests/util/clear.sh"
+  },
+  "nodemonConfig": {
+    "ignore": ["tests/*"],
+    "delay": "2500"
+  },
+  "jest": {
+    "verbose": true
   }
 }
