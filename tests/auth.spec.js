@@ -1,15 +1,12 @@
-const faker = require('faker');
+
 const request = require('supertest')('http://localhost:4444');
+const { generateUser } = require('./util/generateData');
 
 let newUser;
 let loggedUser;
 describe('DataPoint', () => {
   beforeAll(() => {
-    newUser = {
-      name: faker.name.findName(),
-      email: `test${faker.internet.email().toLocaleLowerCase()}`,
-      password: faker.internet.password(),
-    };
+    newUser = generateUser();
   });
 
   it('Should throw an error when an empty object is passing', async () => {

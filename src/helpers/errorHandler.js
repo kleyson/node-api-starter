@@ -1,3 +1,4 @@
+const { Error: MongooseError } = require('mongoose');
 /*
   To avoid the use of try{} catch(e) {} in async/await,
   we are use a HOF that receive the original function (that with async)
@@ -10,12 +11,20 @@ const catchErrors = fn =>
   };
 
 const mongooseErrorHandler = (err, req, res, next) => {
-  if (!err.errors) return next(err);
-  const errorKeys = Object.keys(err.errors);
-  const errorMessages = [];
-  errorKeys.forEach(key => errorMessages.push(err.errors[key].message));
-  res.status(422);
-  res.json({ error: errorMessages });
+  if (err instanceof MongooseError) {
+    const errorMessages = [];
+    if (err.errors) {
+      const errorKeys = Object.keys(err.errors);
+      errorKeys.forEach(key => errorMessages.push(err.errors[key].message));
+      res.status(422);
+    } else {
+      errorMessages.push('Internal Error');
+      res.status(500);
+    }
+    res.json({ error: errorMessages });
+    return next();
+  }
+  return next(err);
 };
 
 module.exports = { catchErrors, mongooseErrorHandler };
