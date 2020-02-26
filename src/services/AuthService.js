@@ -1,20 +1,20 @@
-const { generateToken, secret } = require('../helpers/jwtHandler');
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const { generateToken, secret } = require("../helpers/jwtHandler");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 const provideToken = (req, res) => {
   res.send({
     token: generateToken(req.user),
     user: req.user.name,
-    email: req.user.email,
+    email: req.user.email
   });
 };
 
 const localStrategy = new LocalStrategy(
-  { usernameField: 'email' },
+  { usernameField: "email" },
   async (email, password, done) => {
     try {
       const user = await User.findOne({ email });
@@ -27,13 +27,13 @@ const localStrategy = new LocalStrategy(
     } catch (err) {
       done(err);
     }
-  },
+  }
 );
 
 const jwtStrategy = new JwtStrategy(
   {
-    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-    secretOrKey: secret,
+    jwtFromRequest: ExtractJwt.fromHeader("authorization"),
+    secretOrKey: secret
   },
   async (payload, done) => {
     try {
@@ -46,13 +46,13 @@ const jwtStrategy = new JwtStrategy(
     } catch (err) {
       done(err, false);
     }
-  },
+  }
 );
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-const loginAuth = passport.authenticate('local', { session: false });
-const jwtAuth = passport.authenticate('jwt', { session: false });
+const loginAuth = passport.authenticate("local", { session: false });
+const jwtAuth = passport.authenticate("jwt", { session: false });
 
 module.exports = { provideToken, loginAuth, jwtAuth };

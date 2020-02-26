@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt-nodejs');
-const validate = require('mongoose-validator');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt-nodejs");
+const validate = require("mongoose-validator");
 
 // Here is not possible use an arrow function because 'this' must point to module.
 function generateSalt(next) {
@@ -20,22 +20,22 @@ function comparePassword(candidatePassword, callback) {
 }
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, required: 'Name is required', trim: true },
+  name: { type: String, required: "Name is required", trim: true },
   email: {
     type: String,
     unique: true,
     lowercase: true,
     trim: true,
     validate: validate({
-      validator: 'isEmail',
-      message: 'Invalid Email Address',
+      validator: "isEmail",
+      message: "Invalid Email Address"
     }),
-    required: 'Email is required',
+    required: "Email is required"
   },
-  password: { type: String, required: 'Password is required' },
+  password: { type: String, required: "Password is required" }
 });
 
-UserSchema.pre('save', generateSalt);
+UserSchema.pre("save", generateSalt);
 UserSchema.methods.comparePassword = comparePassword;
 
-module.exports = mongoose.model('user', UserSchema);
+module.exports = mongoose.model("user", UserSchema);

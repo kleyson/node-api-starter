@@ -1,4 +1,4 @@
-const Spot = require('../models/Spot');
+const Spot = require("../models/Spot");
 
 const getAll = async (req, res) => {
   const spots = await Spot.find({ user: req.user._id });
@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
 const get = async (req, res) => {
   const spot = await Spot.findById({ _id: req.params.id });
   if (spot === null) {
-    res.status(404).send({ message: 'Spot not found' });
+    res.status(404).send({ message: "Spot not found" });
     return;
   }
   res.json(spot);
@@ -22,15 +22,15 @@ const save = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  req.body.location.type = 'Point';
+  req.body.location.type = "Point";
 
   const spot = await Spot.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
-    runValidators: true,
+    runValidators: true
   }).exec();
 
   if (spot === null) {
-    res.status(404).send({ message: 'Spot not found' });
+    res.status(404).send({ message: "Spot not found" });
     return;
   }
   res.status(200).json(spot);
@@ -39,7 +39,7 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   const { result } = await Spot.remove({ _id: req.params.id });
   if (result.n === 0) {
-    res.status(404).send({ message: 'Spot not found' });
+    res.status(404).send({ message: "Spot not found" });
     return;
   }
   res.status(204).send();
@@ -50,5 +50,5 @@ module.exports = {
   get,
   save,
   update,
-  remove,
+  remove
 };
